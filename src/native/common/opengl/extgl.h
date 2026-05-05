@@ -107,12 +107,13 @@ extern bool extgl_QueryExtension(const GLubyte*extensions, const char *name);
 extern void *extgl_GetProcAddress(const char *name);
 
 
-#ifndef __APPLE__
+#ifdef EXTGL_HAS_NV_PRESENT_VIDEO
 	/* NV_present_video functions (GLX & WGL only) */
 	extern jint extgl_EnumerateVideoDevicesNV(JNIEnv *env, jobject peer_info_handle, jobject devices, jint devices_position);
 	extern jboolean extgl_BindVideoDeviceNV(JNIEnv *env, jobject peer_info_handle, jint video_slot, jlong video_device, jobject attrib_list, jint attrib_list_position);
 	extern jboolean extgl_QueryContextNV(JNIEnv *env, jobject peer_info_handle, jobject context_handle, jint attrib, jobject value, jint value_position);
-
+#endif
+#ifdef EXTGL_HAS_NV_VIDEO_CAPTURE
 	/* NV_video_capture functions (GLX & WGL only) */
 	extern jboolean extgl_BindVideoCaptureDeviceNV(JNIEnv *env, jobject peer_info_handle, jint video_slot, jlong device);
 	extern jint extgl_EnumerateVideoCaptureDevicesNV(JNIEnv *env, jobject peer_info_handle, jobject devices, jint devices_position);

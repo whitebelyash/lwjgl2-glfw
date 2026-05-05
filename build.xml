@@ -297,19 +297,6 @@
 	<target name="headers" description="invokes javah on java classes" depends="compile">
 		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.native}/linux">
 			<class name="org.lwjgl.LinuxSysImplementation" />
-			<class name="org.lwjgl.opengl.LinuxEvent" />
-			<class name="org.lwjgl.opengl.LinuxMouse" />
-			<class name="org.lwjgl.opengl.LinuxKeyboard" />
-			<class name="org.lwjgl.opengl.LinuxDisplay" />
-			<class name="org.lwjgl.opengl.LinuxPeerInfo" />
-		</javah>
-
-		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.native}/linux/opengl">
-			<class name="org.lwjgl.opengl.LinuxPbufferPeerInfo"/>
-			<class name="org.lwjgl.opengl.LinuxDisplayPeerInfo"/>
-			<class name="org.lwjgl.opengl.LinuxAWTGLCanvasPeerInfo"/>
-			<class name="org.lwjgl.opengl.LinuxContextImplementation"/>
-			<class name="org.lwjgl.opengl.LinuxCanvasImplementation"/>
 		</javah>
 
 		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.native}/windows">
@@ -333,14 +320,6 @@
 
 		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.native}/macosx">
 			<class name="org.lwjgl.MacOSXSysImplementation" />
-			<class name="org.lwjgl.opengl.MacOSXCanvasPeerInfo" />
-			<class name="org.lwjgl.opengl.MacOSXPeerInfo" />
-			<class name="org.lwjgl.opengl.MacOSXPbufferPeerInfo" />
-			<class name="org.lwjgl.opengl.MacOSXDisplay" />
-			<class name="org.lwjgl.opengl.MacOSXContextImplementation" />
-			<class name="org.lwjgl.opengl.MacOSXNativeKeyboard" />
-			<class name="org.lwjgl.opengl.MacOSXNativeMouse" />
-			<class name="org.lwjgl.opengl.MacOSXMouseEventQueue" />
 		</javah>
 
 		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.headers}">
@@ -462,7 +441,7 @@
 
 	<!-- Compiles the Java source code -->
 	<target name="compile" description="Compiles the java source code" depends="-initialize">
-		<javac debug="yes" destdir="${lwjgl.bin}" source="1.5" target="1.5" classpath="${lwjgl.lib}/jinput.jar:${lwjgl.lib}/AppleJavaExtensions.jar:${lwjgl.lib}/asm-debug-all.jar" taskname="core">
+		<javac debug="yes" destdir="${lwjgl.bin}" source="1.6" target="1.6" classpath="${lwjgl.lib}/jinput.jar:${lwjgl.lib}/AppleJavaExtensions.jar:${lwjgl.lib}/asm-debug-all.jar" taskname="core">
             <!--<compilerarg value="-Xlint:unchecked"/>-->
 			<src path="${lwjgl.src}/java/"/>
 			<src path="${lwjgl.src}/generated/"/>
@@ -475,40 +454,12 @@
 			<include name="org/lwjgl/util/**"/>
 			<exclude name="org/lwjgl/util/generator/**"/>
 		</javac>
-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/test/**" source="1.5" target="1.5" taskname="test" />
-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/examples/**" source="1.5" target="1.5" taskname="examples" />
+		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/test/**" source="1.6" target="1.6" taskname="test" />
+		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/examples/**" source="1.6" target="1.6" taskname="examples" />
 	</target>
 
 	<target name="compile_native" depends="-initialize, headers, touch-version, version-mismatch" description="Compiles the native files">
-		<condition property="lwjgl.platform.windows">
-			<os family="windows" />
-		</condition>
-		<antcall target="-compile_native_win32" />
-
-		<condition property="lwjgl.platform.linux">
-			<os name="Linux" />
-		</condition>
-		<antcall target="-compile_native_linux" />
-
-		<condition property="lwjgl.platform.freebsd">
-			<os name="FreeBSD" />
-		</condition>
-		<antcall target="-compile_native_freebsd" />
-
-		<condition property="lwjgl.platform.openbsd">
-			<os name="OpenBSD" />
-		</condition>
-		<antcall target="-compile_native_openbsd" />
-
-		<condition property="lwjgl.platform.solaris">
-			<os name="SunOS" />
-		</condition>
-		<antcall target="-compile_native_solaris" />
-
-		<condition property="lwjgl.platform.macosx">
-			<os name="Mac OS X" />
-		</condition>
-		<antcall target="-compile_native_macosx" />
+        <echo message="Native compilation with Ant isn't supported yet. Please compile the CMake file separately"/>
 	</target>
 
 	<!-- Compiles LWJGL on Win32 platforms  -->
@@ -671,7 +622,7 @@
 
 	<!-- Creates the Javadoc -->
 	<target name="javadoc" description="Creates javadoc from java source code">
-		<javadoc destdir="${lwjgl.docs}/javadoc" classpath="${lwjgl.lib}/jinput.jar" author="true" version="true" use="true" source="1.5" windowtitle="LWJGL API" useexternalfile="true">
+		<javadoc destdir="${lwjgl.docs}/javadoc" classpath="${lwjgl.lib}/jinput.jar" author="true" version="true" use="true" source="1.6" windowtitle="LWJGL API" useexternalfile="true">
 			<fileset refid="lwjgl.javadoc.fileset" />
 			<doctitle><![CDATA[<h1>Lightweight Java Game Toolkit</h1>]]></doctitle>
 			<bottom><![CDATA[<i>Copyright &#169; 2002-2009 lwjgl.org. All Rights Reserved.</i>]]></bottom>

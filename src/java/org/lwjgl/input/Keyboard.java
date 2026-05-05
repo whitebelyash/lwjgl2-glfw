@@ -34,6 +34,7 @@ package org.lwjgl.input;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -262,7 +263,7 @@ public class Keyboard {
 	private static boolean repeat_enabled;
 
 	/** The keys status from the last poll */
-	private static final ByteBuffer keyDownBuffer = BufferUtils.createByteBuffer(KEYBOARD_SIZE);
+	public static final ByteBuffer keyDownBuffer = BufferUtils.createByteBuffer(KEYBOARD_SIZE);
 
 	/**
 	 * The key events from the last read: a sequence of pairs of key number,
@@ -312,7 +313,7 @@ public class Keyboard {
 		implementation = impl;
 		implementation.createKeyboard();
 		created = true;
-		readBuffer = ByteBuffer.allocate(EVENT_SIZE*BUFFER_SIZE);
+		readBuffer = ByteBuffer.allocate(EVENT_SIZE*BUFFER_SIZE).order(ByteOrder.nativeOrder());
 		reset();
 	}
 
@@ -530,6 +531,7 @@ public class Keyboard {
 	 * @return The character from the current event
 	 */
 	public static char getEventCharacter() {
+        System.out.println("Event char: "+current_event.character);
 		synchronized (OpenGLPackageAccess.global_lock) {
 			return (char)current_event.character;
 		}
@@ -555,6 +557,7 @@ public class Keyboard {
 	 * @return True if key was down, or false if released
 	 */
 	public static boolean getEventKeyState() {
+        System.out.println("Event state: "+current_event.state);
 		synchronized (OpenGLPackageAccess.global_lock) {
 			return current_event.state;
 		}

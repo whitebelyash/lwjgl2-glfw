@@ -42,7 +42,7 @@
 #include "org_lwjgl_opengl_NVVideoCaptureUtil.h"
 
 JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_NVVideoCaptureUtil_nglBindVideoCaptureDeviceNV(JNIEnv *env, jclass clazz, jobject peer_info, jint video_slot, jlong device) {
-	#ifdef __APPLE__
+	#ifndef EXTGL_HAS_NV_VIDEO_CAPTURE
 		return false;
 	#else
 		return extgl_BindVideoCaptureDeviceNV(env, peer_info, video_slot, device);
@@ -50,7 +50,7 @@ JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_NVVideoCaptureUtil_nglBindVideo
 }
 
 JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_NVVideoCaptureUtil_nglEnumerateVideoCaptureDevicesNV(JNIEnv *env, jclass clazz, jobject peer_info, jobject devices, jint devices_position) {
-	#ifdef __APPLE__
+	#ifndef EXTGL_HAS_NV_VIDEO_CAPTURE
 		return 0;
 	#else
 		return extgl_EnumerateVideoCaptureDevicesNV(env, peer_info, devices, devices_position);
@@ -58,7 +58,7 @@ JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_NVVideoCaptureUtil_nglEnumerateVide
 }
 
 JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_NVVideoCaptureUtil_nglLockVideoCaptureDeviceNV(JNIEnv *env, jclass clazz, jobject peer_info, jlong device) {
-	#ifdef __APPLE__
+	#ifndef EXTGL_HAS_NV_VIDEO_CAPTURE
 		return false;
 	#else
 		return extgl_LockVideoCaptureDeviceNV(env, peer_info, device);
@@ -66,7 +66,7 @@ JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_NVVideoCaptureUtil_nglLockVideo
 }
 
 JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_NVVideoCaptureUtil_nglQueryVideoCaptureDeviceNV(JNIEnv *env, jclass clazz, jobject peer_info, jlong device, jint attribute, jobject value, jint value_position) {
-	#ifdef __APPLE__
+	#ifndef EXTGL_HAS_NV_VIDEO_CAPTURE
 		return false;
 	#else
 		return extgl_QueryVideoCaptureDeviceNV(env, peer_info, device, attribute, value, value_position);
@@ -74,7 +74,7 @@ JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_NVVideoCaptureUtil_nglQueryVide
 }
 
 JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_NVVideoCaptureUtil_nglReleaseVideoCaptureDeviceNV(JNIEnv *env, jclass clazz, jobject peer_info, jlong device) {
-	#ifdef __APPLE__
+	#ifndef EXTGL_HAS_NV_VIDEO_CAPTURE
 		return false;
 	#else
 		return extgl_ReleaseVideoCaptureDeviceNV(env, peer_info, device);

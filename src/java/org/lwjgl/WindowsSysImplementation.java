@@ -31,21 +31,13 @@
  */
 package org.lwjgl;
 
-import java.nio.ByteBuffer;
-import java.security.PrivilegedExceptionAction;
-import java.security.PrivilegedActionException;
-import java.security.AccessController;
-import java.lang.reflect.Method;
-
-import org.lwjgl.opengl.Display;
-
 /**
  * <p>
  * @author $Author$
  * @version $Revision$
  * $Id$
  */
-final class WindowsSysImplementation extends DefaultSysImplementation {
+final class WindowsSysImplementation extends DesktopSysImplementation {
 	private static final int JNI_VERSION = 24;
 
 	static {
@@ -67,53 +59,6 @@ final class WindowsSysImplementation extends DefaultSysImplementation {
 
 	public boolean has64Bit() {
 		return true;
-	}
-
-	private static long getHwnd() {
-		if (!Display.isCreated())
-			return 0;
-		/* Use reflection since we can't make Display.getImplementation
-		 * public
-		 */
-		try {
-			return AccessController.doPrivileged(new PrivilegedExceptionAction<Long>() {
-				public Long run() throws Exception {
-					Method getImplementation_method = Display.class.getDeclaredMethod("getImplementation");
-					getImplementation_method.setAccessible(true);
-					Object display_impl = getImplementation_method.invoke(null);
-					Class<?> WindowsDisplay_class = Class.forName("org.lwjgl.opengl.WindowsDisplay");
-					Method getHwnd_method = WindowsDisplay_class.getDeclaredMethod("getHwnd");
-					getHwnd_method.setAccessible(true);
-					return (Long)getHwnd_method.invoke(display_impl);
-				}
-			});
-		} catch (PrivilegedActionException e) {
-			throw new Error(e);
-		}
-	}
-
-	public void alert(String title, String message) {
-		if(!Display.isCreated()) {
-			initCommonControls();
-		}
-
-		LWJGLUtil.log(String.format("*** Alert *** %s\n%s\n", title, message));
-
-		final ByteBuffer titleText = MemoryUtil.encodeUTF16(title);
-		final ByteBuffer messageText = MemoryUtil.encodeUTF16(message);
-		nAlert(getHwnd(), MemoryUtil.getAddress(titleText), MemoryUtil.getAddress(messageText));
-	}
-	private static native void nAlert(long parent_hwnd, long title, long message);
-	private static native void initCommonControls();
-
-	public boolean openURL(final String url) {
-		try {
-			LWJGLUtil.execPrivileged(new String[]{"rundll32", "url.dll,FileProtocolHandler", url});
-			return true;
-		} catch (Exception e) {
-			LWJGLUtil.log("Failed to open url (" + url + "): " + e.getMessage());
-			return false;
-		}
 	}
 
 	public String getClipboard() {

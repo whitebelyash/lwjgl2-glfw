@@ -152,16 +152,7 @@ public final class Display {
 	}
 
 	private static DisplayImplementation createDisplayImplementation() {
-		switch ( LWJGLUtil.getPlatform() ) {
-			case LWJGLUtil.PLATFORM_LINUX:
-				return new LinuxDisplay();
-			case LWJGLUtil.PLATFORM_WINDOWS:
-				return new WindowsDisplay();
-			case LWJGLUtil.PLATFORM_MACOSX:
-				return new MacOSXDisplay();
-			default:
-				throw new IllegalStateException("Unsupported platform");
-		}
+        return new GLFWDisplay();
 	}
 
 	/** Only constructed by ourselves */
@@ -844,25 +835,20 @@ public final class Display {
 
 			try {
 				drawable.setPixelFormat(pixel_format, attribs);
-				try {
-					createWindow();
-					try {
-						drawable.context = new ContextGL(drawable.peer_info, attribs, shared_drawable != null ? ((DrawableGL)shared_drawable).getContext() : null);
-						try {
-							makeCurrentAndSetSwapInterval();
-							initContext();
-						} catch (LWJGLException e) {
-							drawable.destroy();
-							throw e;
-						}
-					} catch (LWJGLException e) {
-						destroyWindow();
-						throw e;
-					}
-				} catch (LWJGLException e) {
-					drawable.destroy();
-					throw e;
-				}
+                try {
+                    drawable.context = new ContextGL(drawable.peer_info, attribs, shared_drawable != null ? ((DrawableGL)shared_drawable).getContext() : null);
+                    try {
+                        createWindow();
+                        makeCurrentAndSetSwapInterval();
+                        initContext();
+                    } catch (LWJGLException e) {
+                        destroyWindow();
+                        throw e;
+                    }
+                } catch (LWJGLException e) {
+                    drawable.destroy();
+                    throw e;
+                }
 			} catch (LWJGLException e) {
 				display_impl.resetDisplayMode();
 				throw e;

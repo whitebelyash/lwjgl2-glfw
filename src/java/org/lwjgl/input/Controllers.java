@@ -33,9 +33,9 @@ package org.lwjgl.input;
 
 import java.util.ArrayList;
 
-import net.java.games.input.ControllerEnvironment;
-
 import org.lwjgl.LWJGLException;
+
+// TODO: migrate this to GLFW controllers
 
 /**
  * The collection of controllers currently connected.
@@ -44,7 +44,7 @@ import org.lwjgl.LWJGLException;
  */
 public class Controllers {
 	/** The controllers available */
-	private static ArrayList<JInputController> controllers = new ArrayList<JInputController>();
+	private static ArrayList<Controller> controllers = new ArrayList<Controller>();
 	/** The number of controllers */
 	private static int controllerCount;
 
@@ -66,43 +66,9 @@ public class Controllers {
 			return;
 
 		try {
-			ControllerEnvironment env = ControllerEnvironment.getDefaultEnvironment();
-
-			net.java.games.input.Controller[] found = env.getControllers();
-			ArrayList<net.java.games.input.Controller> lollers = new ArrayList<net.java.games.input.Controller>();
-			for ( net.java.games.input.Controller c : found ) {
-				if ( (!c.getType().equals(net.java.games.input.Controller.Type.KEYBOARD)) &&
-				     (!c.getType().equals(net.java.games.input.Controller.Type.MOUSE)) ) {
-					lollers.add(c);
-				}
-			}
-
-			for ( net.java.games.input.Controller c : lollers ) {
-				createController(c);
-			}
-
 			created = true;
 		} catch (Throwable e) {
 			throw new LWJGLException("Failed to initialise controllers",e);
-		}
-	}
-
-	/**
-	 * Utility to create a controller based on its potential sub-controllers
-	 *
-	 * @param c The controller to add
-	 */
-	private static void createController(net.java.games.input.Controller c) {
-		net.java.games.input.Controller[] subControllers = c.getControllers();
-		if (subControllers.length == 0) {
-			JInputController controller = new JInputController(controllerCount,c);
-
-			controllers.add(controller);
-			controllerCount++;
-		} else {
-			for ( net.java.games.input.Controller sub : subControllers ) {
-				createController(sub);
-			}
 		}
 	}
 

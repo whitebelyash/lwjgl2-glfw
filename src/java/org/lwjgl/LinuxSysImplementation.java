@@ -42,7 +42,7 @@ import java.lang.UnsatisfiedLinkError;
  * @version $Revision$
  * $Id$
  */
-final class LinuxSysImplementation extends J2SESysImplementation {
+final class LinuxSysImplementation extends DesktopSysImplementation {
 	private static final int JNI_VERSION = 19;
 
 	static {
@@ -65,26 +65,6 @@ final class LinuxSysImplementation extends J2SESysImplementation {
 
 	public int getRequiredJNIVersion() {
 		return JNI_VERSION;
-	}
-
-	public boolean openURL(final String url) {
-		// Linux may as well resort to pure Java hackery, as there's no Linux native way of doing it
-		// right anyway.
-
-		String[] browsers = {"sensible-browser", "xdg-open", "google-chrome", "chromium", "firefox", "iceweasel", "mozilla", "opera", "konqueror", "nautilus", "galeon", "netscape"};
-
-		for ( final String browser : browsers ) {
-			try {
-				LWJGLUtil.execPrivileged(new String[] { browser, url });
-				return true;
-			} catch (Exception e) {
-				// Ignore
-				e.printStackTrace(System.err);
-			}
-		}
-
-		// Seems to have failed
-		return false;
 	}
 
 	public boolean has64Bit() {

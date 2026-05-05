@@ -83,16 +83,7 @@ final class ContextGL implements Context {
 	}
 
 	private static ContextImplementation createImplementation() {
-		switch ( LWJGLUtil.getPlatform() ) {
-			case LWJGLUtil.PLATFORM_LINUX:
-				return new LinuxContextImplementation();
-			case LWJGLUtil.PLATFORM_WINDOWS:
-				return new WindowsContextImplementation();
-			case LWJGLUtil.PLATFORM_MACOSX:
-				return new MacOSXContextImplementation();
-			default:
-				throw new IllegalStateException("Unsupported platform");
-		}
+		return new GLFWContextImplementation();
 	}
 
 	PeerInfo getPeerInfo() {
@@ -267,7 +258,7 @@ final class ContextGL implements Context {
 	}
 
 	public synchronized void setCLSharingProperties(final PointerBuffer properties) throws LWJGLException {
-		final ByteBuffer peer_handle = peer_info.lockAndGetHandle();
+		/*final ByteBuffer peer_handle = peer_info.lockAndGetHandle();
 		try {
 			switch ( LWJGLUtil.getPlatform() ) {
 				case LWJGLUtil.PLATFORM_WINDOWS:
@@ -293,7 +284,8 @@ final class ContextGL implements Context {
 			}
 		} finally {
 			peer_info.unlock();
-		}
+		}*/
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 }

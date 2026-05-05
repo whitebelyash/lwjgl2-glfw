@@ -44,7 +44,7 @@
 JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_NVPresentVideoUtil_nglEnumerateVideoDevicesNV(
 	JNIEnv *env, jclass clazz, jobject peer_info, jobject devices, jint devices_position
 ) {
-	#ifdef __APPLE__
+	#ifndef EXTGL_HAS_NV_PRESENT_VIDEO
 		return 0;
 	#else
 		return extgl_EnumerateVideoDevicesNV(env, peer_info, devices, devices_position);
@@ -54,7 +54,7 @@ JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_NVPresentVideoUtil_nglEnumerateVide
 JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_NVPresentVideoUtil_nglBindVideoDeviceNV(
 	JNIEnv *env, jclass clazz, jobject peer_info, jint video_slot, jlong video_device, jobject attrib_list, jint attrib_list_position
 ) {
-	#ifdef __APPLE__
+	#ifndef EXTGL_HAS_NV_PRESENT_VIDEO
 		return false;
 	#else
 		return extgl_BindVideoDeviceNV(env, peer_info, video_slot, video_device, attrib_list, attrib_list_position);
@@ -62,7 +62,7 @@ JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_NVPresentVideoUtil_nglBindVideo
 }
 
 JNIEXPORT jboolean JNICALL Java_org_lwjgl_opengl_NVPresentVideoUtil_nglQueryContextNV(JNIEnv *env, jclass clazz, jobject peer_info, jobject context_handle, jint attrib, jobject value, jint value_position) {
-	#ifdef __APPLE__
+	#ifndef EXTGL_HAS_NV_PRESENT_VIDEO
 		return false;
 	#else
 		return extgl_QueryContextNV(env, peer_info, context_handle, attrib, value, value_position);

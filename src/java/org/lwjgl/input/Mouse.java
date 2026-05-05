@@ -32,6 +32,7 @@
 package org.lwjgl.input;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -278,7 +279,7 @@ public class Mouse {
 		coord_buffer = BufferUtils.createIntBuffer(3);
 		if (currentCursor != null && implementation.getNativeCursorCapabilities() != 0)
 			setNativeCursor(currentCursor);
-		readBuffer = ByteBuffer.allocate(EVENT_SIZE * BUFFER_SIZE);
+		readBuffer = ByteBuffer.allocate(EVENT_SIZE * BUFFER_SIZE).order(ByteOrder.nativeOrder());
 		readBuffer.limit(0);
 		setGrabbed(isGrabbed);
 	}
