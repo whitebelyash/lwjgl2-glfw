@@ -27,7 +27,7 @@ build_android_arch() {
    popd
 }
 
-ant headers jars
+ant jars headers
 build_android_arch arm64-v8a
 build_android_arch armeabi-v7a
 build_android_arch x86
