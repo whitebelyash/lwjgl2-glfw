@@ -23,6 +23,10 @@ build_android_arch() {
    pushd cibuild-$1
    cmake $PLATFORM_BUILD -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=android-21 -DANDROID_ABI=$1
    make -j $(($(nproc)*2))
+   set +e
+   $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip liblwjgl.so
+   $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip liblwjgl64.so
+   set -e
    zip ../libs/lwjgl-native-$1.jar liblwjgl.so liblwjgl64.so
    popd
 }
