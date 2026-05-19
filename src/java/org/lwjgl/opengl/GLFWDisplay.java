@@ -4,7 +4,9 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.EventQueue;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -24,12 +26,33 @@ public class GLFWDisplay implements DisplayImplementation {
     private static final ByteBuffer mouseKeyBuffer = nGetMouseKeyBuffer();
     private static final IntBuffer mouseBuffer = nGetMouseBuffer().order(ByteOrder.nativeOrder()).asIntBuffer();
 
+    private static Frame attachedWindow = null;
+
 
     public void createWindow(DrawableLWJGL drawable, DisplayMode mode, Canvas parent, int x, int y) throws LWJGLException {
         // In GLFW we don't actually have contexts. Instead we have windows, always with a context.
         ContextGL primaryContext = (ContextGL) drawable.getContext();
         long primaryWindowHandle = GLFWContextImplementation.getTrueHandle(primaryContext.getHandle());
-        nAttachWindow(primaryWindowHandle, Display.isResizable());
+        boolean resizable = Display.isResizable();
+
+        if(parent != null) {
+            // HACK for Minecraft: set Display settings based on the parent window of Canvas and hide it
+            attachedWindow = (Frame) SwingUtilities.getWindowAncestor(parent);
+
+            resizable = attachedWindow.isResizable();
+            Point screenLocation = attachedWindow.getLocationOnScreen();
+
+            x = screenLocation.x;
+            y = screenLocation.y;
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    //attachedWindow.setVisible(false);
+                }
+            });
+        }
+
+        nAttachWindow(primaryWindowHandle, resizable);
         visible = true;
         if(Display.isFullscreen()) {
             nGoFullscreen( mode.getWidth(), mode.getHeight(), mode.getFrequency());
@@ -45,6 +68,10 @@ public class GLFWDisplay implements DisplayImplementation {
 
     public void destroyWindow() {
         nDetachWindow();
+        if(attachedWindow != null) {
+            attachedWindow.setVisible(true);
+            attachedWindow = null;
+        }
     }
 
     public void switchDisplayMode(DisplayMode mode) throws LWJGLException {
@@ -110,6 +137,10 @@ public class GLFWDisplay implements DisplayImplementation {
     }
 
     public void reshape(int x, int y, int width, int height) {
+        if(attachedWindow != null) {
+            x = GLFWDisplay.x;
+            y = GLFWDisplay.y;
+        }
         nReshape(x, y, width, height);
     }
 
@@ -273,10 +304,19 @@ public class GLFWDisplay implements DisplayImplementation {
     private static native ByteBuffer nGetMouseEventBuffer();
 
     @SuppressWarnings("unused")
-    private static void cUpdateWindowSize(int width, int height) {
+    private static void cUpdateWindowSize(final int width, final int height) {
         GLFWDisplay.width = width;
         GLFWDisplay.height = height;
         GLFWDisplay.resized = true;
+        if(attachedWindow != null) EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                // Annoying, but we need to make a roundtrip through AWT to correctly notify Display of a window resize when
+                // it has a parent
+                Insets insets = attachedWindow.getInsets();
+                attachedWindow.setSize(width + insets.left + insets.right, height + insets.top + insets.bottom);
+            }
+        });
     }
 
     @SuppressWarnings("unused")

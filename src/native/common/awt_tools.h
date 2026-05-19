@@ -41,7 +41,7 @@
 #define __LWJGL_AWT_TOOLS_H
 
 #include <jni.h>
-#include <jawt_md.h>
+#include <jawt.h>
 
 typedef struct {
 	JAWT awt;

@@ -5,6 +5,8 @@
 #ifndef LWJGL2_CONTEXT_H
 #define LWJGL2_CONTEXT_H
 
+#define GLFW_INCLUDE_NONE
+
 #include <GLFW/glfw3.h>
 #include <jni.h>
 #include <stdbool.h>

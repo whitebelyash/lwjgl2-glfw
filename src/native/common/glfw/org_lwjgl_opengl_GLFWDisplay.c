@@ -1,6 +1,7 @@
 //
 // Created by maks on 23.04.2026.
 //
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 #include "common_tools.h"
