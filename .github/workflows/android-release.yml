@@ -1,0 +1,42 @@
+name: Android Release build
+
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: MojoLauncher version
+        required: true
+        type: string
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Fetch latest LWJGL artifacts
+      uses: dawidd6/action-download-artifact@v8
+      with:
+        workflow: android.yml
+        workflow_conclusion: success
+        name: lwjgl2
+        path: release_jars/
+        use_unzip: true
+    - name: Generate hashes
+      run: pushd release_jars/ && sha1sum *.jar > hashes.sha1 && popd
+
+    - name: Release artifacts
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ inputs.version }}
+        name: LWJGL 2 for Android
+        files: |
+          release_jars/lwjgl.jar
+          release_jars/lwjgl_util.jar
+          release_jars/jinput.jar
+          release_jars/lwjgl-native-*
+          release_jars/hashes.sha1
