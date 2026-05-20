@@ -41,8 +41,15 @@ static jbyte mouseKeyBuffer[8];
 static jbyte* keyboardKeyBuffer;
 static bool mouseMoved = false;
 static bool isInGrabMode = false;
+static jint lastGrabX, lastGrabY;
 static int windowHeight = 0;
 
+static void getCursorPosInt(jint *x, jint *y) {
+    double cx, cy;
+    glfwGetCursorPos(attachedWindow, &cx, &cy);
+    *x = (jint) cx;
+    *y = (jint) cy;
+}
 
 static jobject createVideoMode(JNIEnv *env, const GLFWvidmode* mode) {
     if (mode == NULL) return NULL;
@@ -219,7 +226,10 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLFWDisplay_nEnableGrab(JNIEnv *env
     if (attachedWindow == NULL) return;
     isInGrabMode = enable;
     glfwSetInputMode(attachedWindow, GLFW_CURSOR, enable ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
-    if (enable) glfwSetCursorPos(attachedWindow, 0, 0);
+    if (enable) {
+        getCursorPosInt(&lastGrabX, &lastGrabY);
+        mouseBuffer.x = mouseBuffer.y = 0;
+    }
 }
 
 JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLFWDisplay_nAttachWindow(JNIEnv *env, jclass clazz, jlong handle, jboolean resizable) {
@@ -280,22 +290,27 @@ JNIEXPORT jobject JNICALL Java_org_lwjgl_opengl_GLFWDisplay_nGetMouseKeyBuffer(J
 JNIEXPORT jlong JNICALL Java_org_lwjgl_opengl_GLFWDisplay_nPollEvents(JNIEnv *env, jclass clazz) {
     glfwPollEvents();
     if (mouseMoved) {
-        double xpos, ypos;
-        glfwGetCursorPos(attachedWindow, &xpos, &ypos);
+        jint xpos, ypos;
         if (isInGrabMode) {
+            jint xsim, ysim;
+            getCursorPosInt(&xsim, &ysim);
+            xpos = lastGrabX - xsim;
+            ypos = lastGrabY - ysim;
+            lastGrabX = xsim;
+            lastGrabY = ysim;
             ypos *= -1;
-            glfwSetCursorPos(attachedWindow, 0, 0);
         } else {
+            getCursorPosInt(&xpos, &ypos);
             ypos = -ypos + windowHeight;
         }
-        mouseBuffer.x = (jint) xpos;
-        mouseBuffer.y = (jint) ypos;
+        mouseBuffer.x = xpos;
+        mouseBuffer.y = ypos;
         submitMouseMovedEvent();
         mouseMoved = false;
-    }else if (isInGrabMode) {
+    } else if (isInGrabMode) {
         mouseBuffer.x = mouseBuffer.y = 0;
     }
-    jlong compoundEventCount = ((jlong) mouse.count) | ((jlong)keyboard.count) << 32;
+    const jlong compoundEventCount = ((jlong) mouse.count) | ((jlong)keyboard.count) << 32;
     mouse.count = 0;
     keyboard.count = 0;
     return compoundEventCount;
