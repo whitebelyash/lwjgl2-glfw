@@ -773,6 +773,7 @@ public interface GL11 {
 	void glEnd();
 
 	@NoErrorCheck
+	@DeprecatedGL
 	void glArrayElement(int i);
 
 	void glClearDepth(double depth);
@@ -795,6 +796,7 @@ public interface GL11 {
 
 	void glCopyTexImage1D(@GLenum int target, int level, int internalFormat, int x, int y, @GLsizei int width, int border);
 
+	@DeprecatedGL
 	void glCopyPixels(int x, int y, int width, int height, int type);
 
 	@DeprecatedGL
@@ -853,6 +855,7 @@ public interface GL11 {
 	@DeprecatedGL
 	void glColor4ub(@GLubyte byte red, @GLubyte byte green, @GLubyte byte blue, @GLubyte byte alpha);
 
+	@DeprecatedGL
 	void glClipPlane(@GLenum int plane, @Check("4") @Const DoubleBuffer equation);
 
 	void glClearStencil(int s);
@@ -980,6 +983,7 @@ public interface GL11 {
 	@NoErrorCheck
 	int glGetError();
 
+	@DeprecatedGL
 	void glGetClipPlane(@GLenum int plane, @OutParameter @Check("4") DoubleBuffer equation);
 
 	@StripPostfix("params")
@@ -1052,6 +1056,7 @@ public interface GL11 {
 
 	boolean glIsEnabled(@GLenum int cap);
 
+	@DeprecatedGL
 	void glInterleavedArrays(@GLenum int format, @GLsizei int stride,
 	                         @BufferObject(BufferKind.ArrayVBO)
 	                         @Check
@@ -1140,19 +1145,23 @@ public interface GL11 {
 	void glGetTexGendv2(@GLenum int coord, @GLenum int pname, @OutParameter DoubleBuffer params);
 
 	@StripPostfix("params")
+	@DeprecatedGL
 	void glGetTexEnviv(@GLenum int coord, @GLenum int pname, @OutParameter @Check("4") IntBuffer params);
 
 	@Alternate("glGetTexEnviv")
 	@GLreturn("params")
 	@StripPostfix(value = "params", hasPostfix = false)
+	@DeprecatedGL
 	void glGetTexEnviv2(@GLenum int coord, @GLenum int pname, @OutParameter IntBuffer params);
 
 	@StripPostfix("params")
+	@DeprecatedGL
 	void glGetTexEnvfv(@GLenum int coord, @GLenum int pname, @OutParameter @Check("4") FloatBuffer params);
 
 	@Alternate("glGetTexEnvfv")
 	@GLreturn("params")
 	@StripPostfix(value = "params", hasPostfix = false)
+	@DeprecatedGL
 	void glGetTexEnvfv2(@GLenum int coord, @GLenum int pname, @OutParameter FloatBuffer params);
 
 	@Const
@@ -1352,6 +1361,7 @@ public interface GL11 {
 	@DeprecatedGL
 	void glMultMatrixd(@Check("16") @Const DoubleBuffer m);
 
+	@DeprecatedGL
 	void glShadeModel(@GLenum int mode);
 
 	@DeprecatedGL
@@ -1582,14 +1592,18 @@ public interface GL11 {
 	@DeprecatedGL
 	void glTexGeniv(@GLenum int coord, @GLenum int pname, @Check("4") @Const IntBuffer params);
 
+	@DeprecatedGL
 	void glTexEnvf(@GLenum int target, @GLenum int pname, float param);
 
+	@DeprecatedGL
 	void glTexEnvi(@GLenum int target, @GLenum int pname, int param);
 
 	@StripPostfix("params")
+	@DeprecatedGL
 	void glTexEnvfv(@GLenum int target, @GLenum int pname, @Check("4") @Const FloatBuffer params);
 
 	@StripPostfix("params")
+	@DeprecatedGL
 	void glTexEnviv(@GLenum int target, @GLenum int pname, @Check("4") @Const IntBuffer params);
 
 	@DeprecatedGL
