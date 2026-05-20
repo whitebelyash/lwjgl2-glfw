@@ -25,6 +25,7 @@ jobs:
         workflow_conclusion: success
         name: lwjgl2
         path: release_jars/
+        branch: mojospec
         use_unzip: true
     - name: Generate hashes
       run: pushd release_jars/ && sha1sum *.jar > hashes.sha1 && popd
