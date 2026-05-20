@@ -28,7 +28,7 @@ static void unpack_attribs(JNIEnv* env, jobject attribs, GLFWContextInfo* my_att
     my_attribs->mask = (int)(*env)->GetIntField(env, attribs, (*env)->GetFieldID(env, cl_attribs, "profileMask", "I"));
     my_attribs->flags = (int)(*env)->GetIntField(env, attribs, (*env)->GetFieldID(env, cl_attribs, "contextFlags", "I"));
     my_attribs->resetStrategy = (int)(*env)->GetIntField(env, attribs, (*env)->GetFieldID(env, cl_attribs, "contextResetNotificationStrategy", "I"));
-    my_attribs->releaseBehaviour = (int)(*env)->GetIntField(env, attribs, (*env)->GetFieldID(env, cl_attribs, "contextReleaseBehaviour", "I"));
+//    my_attribs->releaseBehaviour = (int)(*env)->GetIntField(env, attribs, (*env)->GetFieldID(env, cl_attribs, "contextReleaseBehaviour", "I"));
 }
 
 JNIEXPORT jobject JNICALL Java_org_lwjgl_opengl_GLFWPeerInfo_createHandle
