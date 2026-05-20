@@ -238,6 +238,8 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLFWDisplay_nAttachWindow(JNIEnv *e
     glfwSetCursorPosCallback(window, callbackMousePos);
     glfwSetScrollCallback(window, callbackMouseWheel);
     glfwShowWindow(window);
+    // Immediately update the window focus
+    callbackWindowFocus(window, glfwGetWindowAttrib(window, GLFW_FOCUSED));
 }
 
 JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLFWDisplay_nDetachWindow(JNIEnv *env, jclass clazz) {
