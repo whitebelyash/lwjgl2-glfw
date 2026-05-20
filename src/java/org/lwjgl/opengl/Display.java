@@ -428,6 +428,8 @@ public final class Display {
 	 */
 	public static void setParent(Canvas parent) throws LWJGLException {
 		// Ignore any attempts at AWT interop
+		// Make the game resizable (because the parent is also usually resizable)
+		setResizable(true);
 	}
 
 	/**
