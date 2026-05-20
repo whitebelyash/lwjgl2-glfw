@@ -427,27 +427,7 @@ public final class Display {
 	 * the Dispaly will inherit the size of the parent, disregarding the currently set display mode.<p>
 	 */
 	public static void setParent(Canvas parent) throws LWJGLException {
-		synchronized ( GlobalLock.lock ) {
-			if ( Display.parent != parent ) {
-				Display.parent = parent;
-				if ( !isCreated() )
-					return;
-				destroyWindow();
-				try {
-					if ( isFullscreen() ) {
-						switchDisplayMode();
-					} else {
-						display_impl.resetDisplayMode();
-					}
-					createWindow();
-					makeCurrentAndSetSwapInterval();
-				} catch (LWJGLException e) {
-					drawable.destroy();
-					display_impl.resetDisplayMode();
-					throw e;
-				}
-			}
-		}
+		// Ignore any attempts at AWT interop
 	}
 
 	/**
