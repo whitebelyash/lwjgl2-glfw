@@ -133,7 +133,7 @@ static void callbackMouseButton(GLFWwindow* window, int button, int action, int 
     pendingEvent->button = (jbyte) button;
     const jbyte button_on = (action == GLFW_PRESS) ? 1 : 0;
     pendingEvent->state = button_on;
-    if (button > 0) mouseKeyBuffer[button] = button_on;
+    if (button >= 0) mouseKeyBuffer[button] = button_on;
 }
 
 static void callbackMouseWheel(GLFWwindow* window, double xoffset, double yoffset) {
