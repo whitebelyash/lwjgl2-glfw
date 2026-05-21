@@ -37,7 +37,7 @@ build_android_arch() {
    popd
 }
 
-#ant jars compile_native
+ant jars compile_native
 build_android_arch arm64-v8a
 build_android_arch armeabi-v7a
 build_android_arch x86
