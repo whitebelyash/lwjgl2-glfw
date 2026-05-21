@@ -26,7 +26,7 @@ public class GLFWDisplay implements DisplayImplementation {
     private static final ByteBuffer mouseKeyBuffer = nGetMouseKeyBuffer();
     private static final IntBuffer mouseBuffer = nGetMouseBuffer().order(ByteOrder.nativeOrder()).asIntBuffer();
 
-    private static Frame attachedWindow = null;
+    private static Canvas attachedCanvas = null;
 
 
     public void createWindow(DrawableLWJGL drawable, DisplayMode mode, Canvas parent, int x, int y) throws LWJGLException {
@@ -37,19 +37,13 @@ public class GLFWDisplay implements DisplayImplementation {
 
         if(parent != null) {
             // HACK for Minecraft: set Display settings based on the parent window of Canvas and hide it
-            attachedWindow = (Frame) SwingUtilities.getWindowAncestor(parent);
+            attachedCanvas = parent;
 
-            resizable = attachedWindow.isResizable();
-            Point screenLocation = attachedWindow.getLocationOnScreen();
+            resizable = true;
+            Point screenLocation = attachedCanvas.getLocationOnScreen();
 
             x = screenLocation.x;
             y = screenLocation.y;
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    //attachedWindow.setVisible(false);
-                }
-            });
         }
 
         nAttachWindow(primaryWindowHandle, resizable);
@@ -68,10 +62,7 @@ public class GLFWDisplay implements DisplayImplementation {
 
     public void destroyWindow() {
         nDetachWindow();
-        if(attachedWindow != null) {
-            attachedWindow.setVisible(true);
-            attachedWindow = null;
-        }
+        attachedCanvas = null;
     }
 
     public void switchDisplayMode(DisplayMode mode) throws LWJGLException {
@@ -137,7 +128,7 @@ public class GLFWDisplay implements DisplayImplementation {
     }
 
     public void reshape(int x, int y, int width, int height) {
-        if(attachedWindow != null) {
+        if(attachedCanvas != null) {
             x = GLFWDisplay.x;
             y = GLFWDisplay.y;
         }
@@ -308,13 +299,12 @@ public class GLFWDisplay implements DisplayImplementation {
         GLFWDisplay.width = width;
         GLFWDisplay.height = height;
         GLFWDisplay.resized = true;
-        if(attachedWindow != null) EventQueue.invokeLater(new Runnable() {
+        if(attachedCanvas != null) EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 // Annoying, but we need to make a roundtrip through AWT to correctly notify Display of a window resize when
                 // it has a parent
-                Insets insets = attachedWindow.getInsets();
-                attachedWindow.setSize(width + insets.left + insets.right, height + insets.top + insets.bottom);
+                attachedCanvas.setSize(width, height);
             }
         });
     }
