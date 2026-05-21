@@ -30,17 +30,6 @@ typedef struct PACKED {
 	jint dwheel;
 } MouseBuffer;
 
-#define PENDING_EVENT_KEY 0
-#define PENDING_EVENT_MOUSE 1
-
-typedef struct PACKED {
-    jbyte type;
-    union {
-        KeyEvent k;
-        MouseEvent m;
-    };
-} CompoundEvent;
-
 static inline jint getLwjgl2Keycode(int glfw_key) {
 	switch (glfw_key) {
 		case GLFW_KEY_ESCAPE: return 0x01;
