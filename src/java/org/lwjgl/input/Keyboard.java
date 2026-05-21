@@ -531,7 +531,6 @@ public class Keyboard {
 	 * @return The character from the current event
 	 */
 	public static char getEventCharacter() {
-        System.out.println("Event char: "+current_event.character);
 		synchronized (OpenGLPackageAccess.global_lock) {
 			return (char)current_event.character;
 		}
@@ -557,7 +556,6 @@ public class Keyboard {
 	 * @return True if key was down, or false if released
 	 */
 	public static boolean getEventKeyState() {
-        System.out.println("Event state: "+current_event.state);
 		synchronized (OpenGLPackageAccess.global_lock) {
 			return current_event.state;
 		}
