@@ -149,6 +149,16 @@ static void callbackMouseWheel(GLFWwindow* window, double xoffset, double yoffse
 }
 
 static void callbackMousePos(GLFWwindow* window, double xpos, double ypos) {
+    const jint cx = (jint) xpos, cy = (jint) ypos;
+    if (isInGrabMode) {
+        mouseBuffer.x = lastGrabX - cx;
+        mouseBuffer.y = cy - lastGrabY;
+        lastGrabX = cx;
+        lastGrabY = cy;
+    }else {
+        mouseBuffer.x = cx;
+        mouseBuffer.y = -cy + windowHeight;
+    }
     mouseMoved = true;
 }
 
@@ -227,6 +237,7 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GLFWDisplay_nEnableGrab(JNIEnv *env
     isInGrabMode = enable;
     glfwSetInputMode(attachedWindow, GLFW_CURSOR, enable ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
     if (enable) {
+        glfwPollEvents();
         getCursorPosInt(&lastGrabX, &lastGrabY);
         mouseBuffer.x = mouseBuffer.y = 0;
     }
@@ -290,21 +301,6 @@ JNIEXPORT jobject JNICALL Java_org_lwjgl_opengl_GLFWDisplay_nGetMouseKeyBuffer(J
 JNIEXPORT jlong JNICALL Java_org_lwjgl_opengl_GLFWDisplay_nPollEvents(JNIEnv *env, jclass clazz) {
     glfwPollEvents();
     if (mouseMoved) {
-        jint xpos, ypos;
-        if (isInGrabMode) {
-            jint xsim, ysim;
-            getCursorPosInt(&xsim, &ysim);
-            xpos = lastGrabX - xsim;
-            ypos = lastGrabY - ysim;
-            lastGrabX = xsim;
-            lastGrabY = ysim;
-            ypos *= -1;
-        } else {
-            getCursorPosInt(&xpos, &ypos);
-            ypos = -ypos + windowHeight;
-        }
-        mouseBuffer.x = xpos;
-        mouseBuffer.y = ypos;
         submitMouseMovedEvent();
         mouseMoved = false;
     } else if (isInGrabMode) {
