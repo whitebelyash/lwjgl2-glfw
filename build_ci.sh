@@ -9,6 +9,12 @@ install_ndk() {
 	export ANDROID_NDK_HOME="$(pwd)/android-ndk-r29"
 }
 
+if [ "$CI" = "true" ]; then
+	# GitHub ships an Ubuntu image with ANDROID_NDK_HOME set to NDK r27,
+	# which does not build 16k page libraries by default
+	install_ndk
+fi
+
 if [ ! -d "${ANDROID_NDK_HOME}" ]; then
 	echo "NDK not found. Set ANDROID_NDK_HOME if you want to use a preinstalled NDK"
 	install_ndk
@@ -31,7 +37,7 @@ build_android_arch() {
    popd
 }
 
-ant jars compile_native
+#ant jars compile_native
 build_android_arch arm64-v8a
 build_android_arch armeabi-v7a
 build_android_arch x86
