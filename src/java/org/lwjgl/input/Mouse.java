@@ -358,12 +358,12 @@ public class Mouse {
 			int poll_dwheel = coord_buffer.get(2);
 
 			if (isGrabbed()) {
-				dx += poll_coord1;
-				dy += poll_coord2;
-				x += poll_coord1;
-				y += poll_coord2;
-				absolute_x += poll_coord1;
-				absolute_y += poll_coord2;
+				dx -= poll_coord1;
+				dy -= poll_coord2;
+				x -= poll_coord1;
+				y -= poll_coord2;
+				absolute_x -= poll_coord1;
+				absolute_y -= poll_coord2;
 			} else {
 				dx = poll_coord1 - absolute_x;
 				dy = poll_coord2 - absolute_y;
