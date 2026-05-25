@@ -151,8 +151,8 @@ static void callbackMouseWheel(GLFWwindow* window, double xoffset, double yoffse
 static void callbackMousePos(GLFWwindow* window, double xpos, double ypos) {
     const jint cx = (jint) xpos, cy = (jint) ypos;
     if (isInGrabMode) {
-        mouseBuffer.x = lastGrabX - cx;
-        mouseBuffer.y = cy - lastGrabY;
+        mouseBuffer.x = cx - lastGrabX;
+        mouseBuffer.y = lastGrabY - cy;
         lastGrabX = cx;
         lastGrabY = cy;
     }else {
