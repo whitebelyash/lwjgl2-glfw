@@ -3,6 +3,7 @@ package org.lwjgl.opengl;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.input.Cursor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -221,7 +222,7 @@ public class GLFWDisplay implements DisplayImplementation {
     }
 
     public int getNativeCursorCapabilities() {
-        return 0;
+        return Cursor.CURSOR_ONE_BIT_TRANSPARENCY;
     }
 
     public void setCursorPosition(int x, int y) {
