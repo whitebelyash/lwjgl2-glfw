@@ -38,6 +38,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.Map;
+import java.lang.reflect.Constructor;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
@@ -144,7 +145,9 @@ public class Mouse {
 
 	private static boolean		isGrabbed;
 
+
 	private static InputImplementation implementation;
+	private static EmptyCursorGrabListener grabListener = null;
 
 	/** Whether we need cursor animation emulation */
 	private static final boolean emulateCursorAnimation = 	LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_WINDOWS ||
@@ -156,6 +159,17 @@ public class Mouse {
 	 * Mouse cannot be constructed.
 	 */
 	private Mouse() {
+
+	}
+
+	static {
+		try {
+			Class infdevMouse = Class.forName("org.lwjgl.input.InfdevMouse");
+			Constructor constructor = infdevMouse.getConstructor();
+			grabListener = (EmptyCursorGrabListener) constructor.newInstance();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -165,6 +179,15 @@ public class Mouse {
 	 */
 	public static Cursor getNativeCursor() {
 		synchronized (OpenGLPackageAccess.global_lock) {
+			//dummy
+			if(currentCursor == null) {
+				Mouse.setGrabbed(false);
+				if(grabListener != null) grabListener.onGrab(false);
+			}
+			if(currentCursor != null) {
+				Mouse.setGrabbed(true);
+				if(grabListener != null) grabListener.onGrab(true);
+			}
 			return currentCursor;
 		}
 	}
@@ -710,4 +733,8 @@ public class Mouse {
         public static boolean isInsideWindow() {
             return implementation.isInsideWindow();
         }
+
+	interface EmptyCursorGrabListener {
+		void onGrab(boolean grabbing);
+	}
 }
