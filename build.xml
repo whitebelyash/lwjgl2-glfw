@@ -208,6 +208,7 @@
 			<fileset dir="${lwjgl.bin}" excludes="${opengl-template-classes}">
 				<patternset id="lwjgl_es.package.pattern">
 					<include name="org/**/*"/>
+					<include name="net/java/**" />
 					<exclude name="org/lwjgl/d3d/**"/>
 					<exclude name="org/lwjgl/test/**"/>
 					<exclude name="org/lwjgl/util/**"/>
@@ -452,6 +453,7 @@
 			<include name="org/lwjgl/openal/**"/>
             <include name="org/lwjgl/opencl/**"/>
 			<include name="org/lwjgl/util/**"/>
+			<include name="net/java/openjdk/cacio/ctc/**"/>
 			<exclude name="org/lwjgl/util/generator/**"/>
 		</javac>
 		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/test/**" source="1.6" target="1.6" taskname="test" />
