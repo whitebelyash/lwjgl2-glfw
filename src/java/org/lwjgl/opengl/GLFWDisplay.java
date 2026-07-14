@@ -238,13 +238,14 @@ public class GLFWDisplay implements DisplayImplementation {
     }
 
     private void updateGrabbing(Object handle){
+        System.out.println("Cursor handle: " + handle);
         //dummy
         if(handle == null) {
             Mouse.setGrabbed(true);
             if(grabListener != null) grabListener.onGrab(true);
             System.out.println("Mouse grabbed!");
         }
-        if(handle != null) {
+        else {
             Mouse.setGrabbed(false);
             if(grabListener != null) grabListener.onGrab(false);
             System.out.println("Mouse ungrabbed!");
@@ -280,7 +281,7 @@ public class GLFWDisplay implements DisplayImplementation {
     }
 
     public Object createCursor(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
-        //updateGrabbing(null);
+        System.out.println("Creating new stub cursor");
         return null;
     }
 
