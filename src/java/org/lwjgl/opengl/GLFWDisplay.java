@@ -237,18 +237,22 @@ public class GLFWDisplay implements DisplayImplementation {
 
     }
 
-    public void setNativeCursor(Object handle) throws LWJGLException {
+    private void updateGrabbing(Object handle){
         //dummy
         if(handle == null) {
-            Mouse.setGrabbed(false);
-            if(grabListener != null) grabListener.onGrab(false);
+            Mouse.setGrabbed(true);
+            if(grabListener != null) grabListener.onGrab(true);
             System.out.println("Mouse grabbed!");
         }
         if(handle != null) {
-            Mouse.setGrabbed(true);
-            if(grabListener != null) grabListener.onGrab(true);
+            Mouse.setGrabbed(false);
+            if(grabListener != null) grabListener.onGrab(false);
             System.out.println("Mouse ungrabbed!");
         }
+    }
+
+    public void setNativeCursor(Object handle) throws LWJGLException {
+        updateGrabbing(handle);
     }
 
     public int getMinCursorSize() {
@@ -276,6 +280,7 @@ public class GLFWDisplay implements DisplayImplementation {
     }
 
     public Object createCursor(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
+        updateGrabbing(null);
         return null;
     }
 
