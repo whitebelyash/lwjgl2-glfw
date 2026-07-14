@@ -242,12 +242,12 @@ public class GLFWDisplay implements DisplayImplementation {
         System.out.println("Cursor handle: " + handle);
         //dummy
         if(handle == null) {
-            Mouse.setGrabbed(false);
+            grabMouse(false);
             if(grabListener != null) grabListener.onGrab(false);
             System.out.println("Mouse ungrabbed!");
         }
         else {
-            Mouse.setGrabbed(true);
+            grabMouse(true);
             if(grabListener != null) grabListener.onGrab(true);
             System.out.println("Mouse grabbed!");
         }

@@ -582,6 +582,28 @@ public class Mouse {
 	}
 
 	/**
+	 * Retrieves the absolute non-clamped position
+	 *
+	 * @return Absolute x axis position of mouse
+	 */
+	public static int getAbsX() {
+		synchronized (OpenGLPackageAccess.global_lock) {
+			return absolute_x;
+		}
+	}
+
+	/**
+	 * Retrieves the absolute non-clamped position
+	 *
+	 * @return Absolute y axis position of mouse
+	 */
+	public static int getAbsY() {
+		synchronized (OpenGLPackageAccess.global_lock) {
+			return absolute_y;
+		}
+	}
+
+	/**
 	 * @return Movement on the x axis since last time getDX() was called.
 	 */
 	public static int getDX() {

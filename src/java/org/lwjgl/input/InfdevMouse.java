@@ -8,15 +8,19 @@ public class InfdevMouse implements ExternalMouseReader, GLFWDisplay.EmptyCursor
     static {
         InfdevGrabHandler.setMouseReader(new InfdevMouse());
     }
+    private int x;
+    private int y;
 
     @Override
     public int getX() {
-        return Mouse.getX();
+        x += Mouse.getAbsX();
+        return x;
     }
 
     @Override
     public int getY() {
-        return Mouse.getY();
+        y += Mouse.getAbsY();
+        return y;
     }
 
     @Override
