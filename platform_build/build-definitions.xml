@@ -34,7 +34,7 @@
 	<fileset id="lwjgl.fileset" dir="${lwjgl.bin}">
 		<patternset id="lwjgl.package.pattern">
 			<include name="org/**/*" />
-			<include name="net/java/openjdk/cacio/ctc/**" />
+			<exclude name="net/java/openjdk/cacio/ctc/**" />
 			<exclude name="org/lwjgl/opengles/**"/>
 			<exclude name="org/lwjgl/d3d/**" />
 			<exclude name="org/lwjgl/test/**" />

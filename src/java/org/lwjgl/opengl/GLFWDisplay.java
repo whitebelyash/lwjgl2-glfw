@@ -13,6 +13,8 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.security.Key;
+import java.lang.reflect.Constructor;
+
 
 public class GLFWDisplay implements DisplayImplementation {
     static {
@@ -28,7 +30,22 @@ public class GLFWDisplay implements DisplayImplementation {
     private static final IntBuffer mouseBuffer = nGetMouseBuffer().order(ByteOrder.nativeOrder()).asIntBuffer();
 
     private static Canvas attachedCanvas = null;
+    private static EmptyCursorGrabListener grabListener = null;
 
+    public interface EmptyCursorGrabListener {
+        void onGrab(boolean grabbing);
+    }
+
+    static {
+        try {
+            Class infdevMouse = Class.forName("org.lwjgl.input.InfdevMouse");
+            Constructor constructor = infdevMouse.getConstructor();
+            grabListener = (EmptyCursorGrabListener) constructor.newInstance();
+            System.out.println("Installed Infdev mouse hook!");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public void createWindow(DrawableLWJGL drawable, DisplayMode mode, Canvas parent, int x, int y) throws LWJGLException {
         // In GLFW we don't actually have contexts. Instead we have windows, always with a context.
@@ -221,7 +238,17 @@ public class GLFWDisplay implements DisplayImplementation {
     }
 
     public void setNativeCursor(Object handle) throws LWJGLException {
-
+        //dummy
+        if(handle == null) {
+            Mouse.setGrabbed(false);
+            if(grabListener != null) grabListener.onGrab(false);
+            System.out.println("Mouse grabbed!");
+        }
+        if(handle != null) {
+            Mouse.setGrabbed(true);
+            if(grabListener != null) grabListener.onGrab(true);
+            System.out.println("Mouse ungrabbed!");
+        }
     }
 
     public int getMinCursorSize() {
