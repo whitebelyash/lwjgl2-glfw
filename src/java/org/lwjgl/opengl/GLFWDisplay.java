@@ -283,7 +283,7 @@ public class GLFWDisplay implements DisplayImplementation {
 
     public Object createCursor(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
         cursorEmpty = numImages > 0;
-        return null;
+        return new Object();
     }
 
     public void destroyCursor(Object cursor_handle) {
