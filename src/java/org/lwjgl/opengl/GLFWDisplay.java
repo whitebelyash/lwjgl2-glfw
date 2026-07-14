@@ -280,7 +280,7 @@ public class GLFWDisplay implements DisplayImplementation {
     }
 
     public Object createCursor(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
-        updateGrabbing(null);
+        //updateGrabbing(null);
         return null;
     }
 
