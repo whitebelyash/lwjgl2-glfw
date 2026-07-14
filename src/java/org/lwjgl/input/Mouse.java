@@ -38,7 +38,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.Map;
-import java.lang.reflect.Constructor;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
@@ -147,7 +146,6 @@ public class Mouse {
 
 
 	private static InputImplementation implementation;
-	private static EmptyCursorGrabListener grabListener = null;
 
 	/** Whether we need cursor animation emulation */
 	private static final boolean emulateCursorAnimation = 	LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_WINDOWS ||
@@ -162,16 +160,6 @@ public class Mouse {
 
 	}
 
-	static {
-		try {
-			Class infdevMouse = Class.forName("org.lwjgl.input.InfdevMouse");
-			Constructor constructor = infdevMouse.getConstructor();
-			grabListener = (EmptyCursorGrabListener) constructor.newInstance();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * Gets the currently bound native cursor, if any.
 	 *
@@ -179,15 +167,6 @@ public class Mouse {
 	 */
 	public static Cursor getNativeCursor() {
 		synchronized (OpenGLPackageAccess.global_lock) {
-			//dummy
-			if(currentCursor == null) {
-				Mouse.setGrabbed(false);
-				if(grabListener != null) grabListener.onGrab(false);
-			}
-			if(currentCursor != null) {
-				Mouse.setGrabbed(true);
-				if(grabListener != null) grabListener.onGrab(true);
-			}
 			return currentCursor;
 		}
 	}
@@ -212,9 +191,11 @@ public class Mouse {
 			currentCursor = cursor;
 			if (isCreated()) {
 				if (currentCursor != null) {
+					System.out.println("Setting real cursor");
 					implementation.setNativeCursor(currentCursor.getHandle());
 					currentCursor.setTimeout();
 				} else {
+					System.out.println("Removing cursor");
 					implementation.setNativeCursor(null);
 				}
 			}
@@ -601,6 +582,28 @@ public class Mouse {
 	}
 
 	/**
+	 * Retrieves the absolute non-clamped position
+	 *
+	 * @return Absolute x axis position of mouse
+	 */
+	public static int getAbsX() {
+		synchronized (OpenGLPackageAccess.global_lock) {
+			return absolute_x;
+		}
+	}
+
+	/**
+	 * Retrieves the absolute non-clamped position
+	 *
+	 * @return Absolute y axis position of mouse
+	 */
+	public static int getAbsY() {
+		synchronized (OpenGLPackageAccess.global_lock) {
+			return absolute_y;
+		}
+	}
+
+	/**
 	 * @return Movement on the x axis since last time getDX() was called.
 	 */
 	public static int getDX() {
@@ -734,7 +737,4 @@ public class Mouse {
             return implementation.isInsideWindow();
         }
 
-	interface EmptyCursorGrabListener {
-		void onGrab(boolean grabbing);
-	}
 }

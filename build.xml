@@ -208,7 +208,7 @@
 			<fileset dir="${lwjgl.bin}" excludes="${opengl-template-classes}">
 				<patternset id="lwjgl_es.package.pattern">
 					<include name="org/**/*"/>
-					<include name="net/java/**" />
+					<exclude name="net/java/**" />
 					<exclude name="org/lwjgl/d3d/**"/>
 					<exclude name="org/lwjgl/test/**"/>
 					<exclude name="org/lwjgl/util/**"/>
