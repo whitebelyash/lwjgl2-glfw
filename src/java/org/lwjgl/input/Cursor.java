@@ -97,6 +97,7 @@ public class Cursor {
 				throw new IllegalArgumentException("xHotspot > width || xHotspot < 0");
 			if (yHotspot >= height || yHotspot < 0)
 				throw new IllegalArgumentException("yHotspot > height || yHotspot < 0");
+			System.out.printf("Creating new cursor %d %d\n", width, height);
 
 			Sys.initialize();
 
