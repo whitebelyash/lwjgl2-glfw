@@ -31,7 +31,6 @@ public class GLFWDisplay implements DisplayImplementation {
 
     private static Canvas attachedCanvas = null;
     private static EmptyCursorGrabListener grabListener = null;
-    private static boolean cursorEmpty;
 
     public interface EmptyCursorGrabListener {
         void onGrab(boolean grabbing);
@@ -42,7 +41,6 @@ public class GLFWDisplay implements DisplayImplementation {
             Class infdevMouse = Class.forName("org.lwjgl.input.InfdevMouse");
             Constructor constructor = infdevMouse.getConstructor();
             grabListener = (EmptyCursorGrabListener) constructor.newInstance();
-            System.out.println("Installed Infdev mouse hook!");
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -239,17 +237,14 @@ public class GLFWDisplay implements DisplayImplementation {
     }
 
     private void updateGrabbing(Object handle){
-        System.out.println("Cursor handle: " + handle);
         //dummy
         if(handle == null) {
             grabMouse(false);
             if(grabListener != null) grabListener.onGrab(false);
-            System.out.println("Mouse ungrabbed!");
         }
         else {
             grabMouse(true);
             if(grabListener != null) grabListener.onGrab(true);
-            System.out.println("Mouse grabbed!");
         }
     }
 
@@ -282,7 +277,6 @@ public class GLFWDisplay implements DisplayImplementation {
     }
 
     public Object createCursor(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
-        cursorEmpty = numImages > 0;
         return new Object();
     }
 

@@ -191,11 +191,9 @@ public class Mouse {
 			currentCursor = cursor;
 			if (isCreated()) {
 				if (currentCursor != null) {
-					System.out.println("Setting real cursor");
 					implementation.setNativeCursor(currentCursor.getHandle());
 					currentCursor.setTimeout();
 				} else {
-					System.out.println("Removing cursor");
 					implementation.setNativeCursor(null);
 				}
 			}
