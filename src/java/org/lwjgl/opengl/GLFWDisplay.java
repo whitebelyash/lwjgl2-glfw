@@ -41,7 +41,7 @@ public class GLFWDisplay implements DisplayImplementation {
             Class infdevMouse = Class.forName("org.lwjgl.input.InfdevMouse");
             Constructor constructor = infdevMouse.getConstructor();
             grabListener = (EmptyCursorGrabListener) constructor.newInstance();
-        } catch (NoClassDefFoundError e){
+        } catch (NoClassDefFoundError | Exception e){
             e.printStackTrace();
         }
     }
